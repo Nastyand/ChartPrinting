@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QWidget>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -38,12 +37,18 @@ MainWindow::MainWindow(QWidget *parent)
     printingButton = std::make_unique<QPushButton>("Печать", this);
     printingButton->setStyleSheet("border: 1px solid black; padding: 4px;");
 
+    // Определение модели файловой системы
+    leftPartModel = std::make_shared<QFileSystemModel>(this);
+
+    // Показать в виде списка
+    listView = std::make_unique<QListView>(this);
+
+
     // Создание разделителя
-    QTableView *tableView1 = new QTableView;
     QTableView *tableView2 = new QTableView;
 
     splitter = std::make_unique<QSplitter>();
-    splitter->addWidget(tableView1);
+    splitter->addWidget(listView.get());
     splitter->addWidget(tableView2);
 
     // Создание QHBoxLayout
@@ -62,7 +67,31 @@ MainWindow::MainWindow(QWidget *parent)
     // Установка QVBoxLayout в виджет
     widget->setLayout(vLayout.release());
     setCentralWidget(widget.release());
+
+    // Соединение сигнала со слотом
+    // Открытие папки по нажатию кнопки
+    connect(openFolderButton.get(), &QPushButton::clicked, this, &MainWindow::OpenFolder);
 }
+
+
+void MainWindow::OpenFolder()
+{
+    // Открытие диалогового окна
+    QString filePath = QFileDialog::getExistingDirectory(this, "Выбор папки", QDir::homePath());
+
+    leftPartModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
+    leftPartModel->setRootPath(filePath);
+
+    // Установка модели данных для отображения
+    listView->setModel(leftPartModel.get());
+    listView->setRootIndex(leftPartModel->index(filePath));
+
+    // Отслеживание выбранных элементов в представлении listView
+    selectionModel = listView->selectionModel();
+}
+
+
+
 
 MainWindow::~MainWindow()
 {

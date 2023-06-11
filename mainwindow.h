@@ -14,6 +14,11 @@
 #include <QLineEdit>
 #include <QTableView>
 
+#include <QFileSystemModel>
+#include <QListView>
+#include <QFileDialog>
+#include <QItemSelectionModel>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -26,8 +31,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void OpenFolder();// Слот для открытия папки
+
 private:
     Ui::MainWindow *ui;
+
+    QString filePath;
 
     std::unique_ptr<QPushButton> openFolderButton; // Кнопка "открыть папку"
     std::unique_ptr<QLabel> chartTypeLabel;        // Метка "тип диаграммы"
@@ -35,5 +45,10 @@ private:
     std::unique_ptr<QCheckBox> chartBWCheckBox;    // Выбор черно-белой диаграммы
     std::unique_ptr<QPushButton> printingButton;   // Кнопка "печать"
     std::unique_ptr<QSplitter> splitter;           // Разделитель
+
+    std::shared_ptr<QFileSystemModel>leftPartModel;// Модель файловой системы
+    std::unique_ptr<QListView>listView;
+
+    QItemSelectionModel* selectionModel;      // Отслеживание выбранных элементов
 };
 #endif // MAINWINDOW_H
