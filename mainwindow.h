@@ -18,6 +18,10 @@
 #include <QListView>
 #include <QFileDialog>
 #include <QItemSelectionModel>
+#include <QFileInfo>
+#include <QDebug>
+#include "ioccontainer.h"
+#include "datareading.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -32,7 +36,9 @@ public:
     ~MainWindow();
 
 public slots:
-    void OpenFolder();// Слот для открытия папки
+    void OpenFolder(); // Слот для открытия папки
+    void ReadData(const QItemSelection &selected, const QItemSelection &deselected); // Слот для извлечения данных из выбранного файла
+
 
 private:
     Ui::MainWindow *ui;
@@ -47,8 +53,8 @@ private:
     std::unique_ptr<QSplitter> splitter;           // Разделитель
 
     std::shared_ptr<QFileSystemModel>leftPartModel;// Модель файловой системы
-    std::unique_ptr<QListView>listView;
-
-    QItemSelectionModel* selectionModel;      // Отслеживание выбранных элементов
+    std::unique_ptr<QListView>listView;            // Представление файлов
+    QItemSelectionModel* selectionModel;           // Отслеживание выбранных элементов
+    IOCContainer ioc;                              // IOC контейнер
 };
 #endif // MAINWINDOW_H

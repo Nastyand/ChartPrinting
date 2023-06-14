@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "datareading.h"
+int IOCContainer::s_nextTypeId = 115094801;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -71,6 +73,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Соединение сигнала со слотом
     // Открытие папки по нажатию кнопки
     connect(openFolderButton.get(), &QPushButton::clicked, this, &MainWindow::OpenFolder);
+
 }
 
 
@@ -88,8 +91,32 @@ void MainWindow::OpenFolder()
 
     // Отслеживание выбранных элементов в представлении listView
     selectionModel = listView->selectionModel();
+
+    connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::ReadData);
 }
 
+void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    Q_UNUSED(deselected);
+
+    // Получение списка индексов
+    QModelIndexList indexes = selected.indexes();
+
+    // Выделение первого индекса
+    filePath = leftPartModel->filePath(indexes.first());
+
+    // Проверка на тип файла
+    QFileInfo fileInfo(filePath);
+    QString fileType = fileInfo.suffix();
+
+    if (fileType == "sqlite")
+    {
+        // Регистрирация IDataReading с классом SqlDataReading
+        ioc.RegisterInstance<IDataReading, SqlDataReading>();
+        ioc.GetObject<IDataReading>()->GetData(filePath);
+    }
+
+}
 
 
 
