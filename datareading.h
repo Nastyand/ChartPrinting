@@ -5,6 +5,9 @@
 #include <QDebug>
 #include <QMap>
 #include <QStringList>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFile>
 
 class IDataReading// Абстрактный класс для чтения данных
 {
@@ -14,6 +17,12 @@ public:
 };
 
 class SqlDataReading: public IDataReading // Конкретная реализация для sql
+{
+public:
+    QMap<QString,double> GetData(QString filePath);// Метод, возвращающий данные в формате ключ-значение
+};
+
+class JsonDataReading: public IDataReading // Конкретная реализация для json
 {
 public:
     QMap<QString,double> GetData(QString filePath);// Метод, возвращающий данные в формате ключ-значение

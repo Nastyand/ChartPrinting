@@ -116,6 +116,13 @@ void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &
         ioc.GetObject<IDataReading>()->GetData(filePath);
     }
 
+    else if (fileType == "json")
+    {
+        // Регистрирация IDataReading с классом JsonDataReading
+        ioc.RegisterInstance<IDataReading, JsonDataReading>();
+        ioc.GetObject<IDataReading>()->GetData(filePath);
+    }
+
 }
 
 
