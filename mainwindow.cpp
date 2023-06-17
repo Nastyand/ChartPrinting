@@ -73,9 +73,11 @@ MainWindow::MainWindow(QWidget *parent)
     widget->setLayout(vLayout.release());
     setCentralWidget(widget.release());
 
-    // Соединение сигнала со слотом
-    // Открытие папки по нажатию кнопки
+    // Соединение сигналов со слотами
     connect(openFolderButton.get(), &QPushButton::clicked, this, &MainWindow::OpenFolder);
+    connect(chartTypesComboBox.get(), QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::DrawChart);
+    connect(chartBWCheckBox.get(), &QCheckBox::stateChanged, this, &MainWindow::ColorChange);
+    connect(printingButton.get(), &QPushButton::clicked, this, &MainWindow::PrintChart);
 }
 
 
@@ -87,6 +89,13 @@ void MainWindow::OpenFolder()
     leftPartModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
     leftPartModel->setRootPath(filePath);
 
+    // Фильтр типов файлов
+    QStringList filter;
+    filter << "*.sqlite" << "*.json";
+    leftPartModel->setNameFilters(filter);
+    leftPartModel->setNameFilterDisables(false);
+
+
     // Установка модели данных для отображения
     listView->setModel(leftPartModel.get());
     listView->setRootIndex(leftPartModel->index(filePath));
@@ -94,10 +103,9 @@ void MainWindow::OpenFolder()
     // Отслеживание выбранных элементов в представлении listView
     selectionModel = listView->selectionModel();
 
+    // Соединение сигналов со слотами
     connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::ReadData);
     connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::DrawChart);
-    connect(chartBWCheckBox.get(), &QCheckBox::stateChanged, this, &MainWindow::ColorChange);
-    connect(printingButton.get(), &QPushButton::clicked, this, &MainWindow::PrintChart);
 }
 
 void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &deselected)
@@ -126,7 +134,7 @@ void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &
         ioc.RegisterInstance<IDataReading, JsonDataReading>();
     }
 
-    data = ioc.GetObject<IDataReading>()->GetData(filePath, 10); // Создание объекта, хранящего данные
+    data = ioc.GetObject<IDataReading>()->GetData(filePath); // Создание объекта, хранящего данные
 }
 
 
@@ -139,7 +147,7 @@ void MainWindow::DrawChart()
     else if (chartTypesComboBox->currentText() == "Круговая диаграмма") {
         ioc.RegisterInstance<Charts, PieCharts>(); // Регистрация ICharts с классом PieCharts
     }
-    ioc.GetObject<Charts>()->ChartDrawing(data, chartView); // Рисование диаграммы нужного типа
+    ioc.GetObject<Charts>()->ChartDrawing(data, chartView, 15); // Рисование диаграммы нужного типа
 }
 
 void MainWindow::ColorChange()

@@ -13,18 +13,18 @@ class IDataReading// Абстрактный класс для чтения да�
 {
 public:
     virtual ~IDataReading()=default;
-    virtual QMap<QString,double> GetData(QString filePath, int limit)=0;
+    virtual QMap<QString,double> GetData(QString filePath)=0;
 };
 
 class SqlDataReading: public IDataReading // Конкретная реализация для sql
 {
 public:
-    QMap<QString,double> GetData(QString filePath, int limit);// Метод, возвращающий данные в формате ключ-значение
+    QMap<QString,double> GetData(QString filePath);// Метод, возвращающий данные в формате ключ-значение
 };
 
 class JsonDataReading: public IDataReading // Конкретная реализация для json
 {
 public:
-    QMap<QString,double> GetData(QString filePath, int limit);// Метод, возвращающий данные в формате ключ-значение
+    QMap<QString,double> GetData(QString filePath);// Метод, возвращающий данные в формате ключ-значение
 };
 #endif // DATAREADING_H
