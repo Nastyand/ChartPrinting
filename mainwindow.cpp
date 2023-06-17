@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "datareading.h"
+#include "charts.h"
 int IOCContainer::s_nextTypeId = 115094801;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -44,14 +45,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Показать в виде списка
     listView = std::make_unique<QListView>(this);
+    listView->resize(390, 0);
 
+    // Определение объекта для отображения диаграммы
+    chartView=std::make_shared<QChartView>(this);
+    chartView->resize(610, 0);
 
     // Создание разделителя
-    QTableView *tableView2 = new QTableView;
-
     splitter = std::make_unique<QSplitter>();
     splitter->addWidget(listView.get());
-    splitter->addWidget(tableView2);
+    splitter->addWidget(chartView.get());
 
     // Создание QHBoxLayout
     std::unique_ptr<QHBoxLayout> hLayout = std::make_unique<QHBoxLayout>();
@@ -93,6 +96,7 @@ void MainWindow::OpenFolder()
     selectionModel = listView->selectionModel();
 
     connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::ReadData);
+    connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::DrawChart);
 }
 
 void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &deselected)
@@ -113,15 +117,27 @@ void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &
     {
         // Регистрирация IDataReading с классом SqlDataReading
         ioc.RegisterInstance<IDataReading, SqlDataReading>();
-        ioc.GetObject<IDataReading>()->GetData(filePath);
     }
 
     else if (fileType == "json")
     {
         // Регистрирация IDataReading с классом JsonDataReading
         ioc.RegisterInstance<IDataReading, JsonDataReading>();
-        ioc.GetObject<IDataReading>()->GetData(filePath);
     }
+
+    data = ioc.GetObject<IDataReading>()->GetData(filePath, 15); // Создание объекта, хранящего данные
+}
+
+
+
+void MainWindow::DrawChart()
+{
+    if (chartTypesComboBox->currentText() == "Столбчатая диаграмма") { // Проверка установленного типа диаграммы
+        ioc.RegisterInstance<ICharts, BarCharts>(); // Регистрация ICharts с классом BarCharts
+    }
+    ioc.GetObject<ICharts>()->ChartDrawing(data, chartView); // Рисование диаграммы нужного типа
+
+
 
 }
 

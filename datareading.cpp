@@ -1,6 +1,6 @@
 #include "datareading.h"
 
-QMap<QString,double> SqlDataReading::GetData(QString filePath)
+QMap<QString,double> SqlDataReading::GetData(QString filePath, int limit)
 {
     QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE"); // Для соединения с базой данных активизируем драйвер
     database.setDatabaseName(filePath);
@@ -10,8 +10,10 @@ QMap<QString,double> SqlDataReading::GetData(QString filePath)
     if (database.open()) {
         QStringList tables = database.tables();
         QSqlQuery query ("SELECT * FROM " + tables.first()); // Выполнение запроса, начиная с первой записи
-        while (query.next()) { // Пока существует следующая запись
+        int i=0;
+        while (query.next() &&i<limit) { // Пока существует следующая запись
             data.insert(query.value(0).toString(), query.value(1).toDouble());// Добавление значения в объект data
+            i++;
         }
         qDebug()<< data.firstKey();// вывод 1 ключа для проверки
     }
@@ -22,7 +24,7 @@ QMap<QString,double> SqlDataReading::GetData(QString filePath)
 }
 
 
-QMap<QString,double> JsonDataReading::GetData(QString filePath)
+QMap<QString,double> JsonDataReading::GetData(QString filePath, int limit)
 {
 
     QFile file(filePath); // Создание объекта для представления файла
@@ -35,9 +37,10 @@ QMap<QString,double> JsonDataReading::GetData(QString filePath)
 
         QJsonObject object = document.object(); // Создание json-объекта из json-документа
         QListIterator<QString> iterator(object.keys()); // Создание итератора для обхода списка ключей объекта
-
-        while (iterator.hasNext()) { // Пока существует следующий элемент
+        int i=0;
+        while (iterator.hasNext()&& i<limit) { // Пока существует следующий элемент
             data.insert(iterator.next(), object.value(iterator.next()).toDouble()); // Добавление значения в объект data
+            i++;
         }
         if (data.isEmpty()) {       // Проверка файла на пустоту
             qDebug()<< "Файл пуст ";
@@ -47,6 +50,5 @@ QMap<QString,double> JsonDataReading::GetData(QString filePath)
     else {
         qDebug()<< "Ошибка в чтении файла ";
     }
-
     return data;
 }

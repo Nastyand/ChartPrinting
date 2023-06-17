@@ -22,6 +22,7 @@
 #include <QDebug>
 #include "ioccontainer.h"
 #include "datareading.h"
+#include <QChartView>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,6 +39,7 @@ public:
 public slots:
     void OpenFolder(); // Слот для открытия папки
     void ReadData(const QItemSelection &selected, const QItemSelection &deselected); // Слот для извлечения данных из выбранного файла
+    void DrawChart(); // Слот для рисования диаграммы выбранного типа
 
 
 private:
@@ -56,5 +58,9 @@ private:
     std::unique_ptr<QListView>listView;            // Представление файлов
     QItemSelectionModel* selectionModel;           // Отслеживание выбранных элементов
     IOCContainer ioc;                              // IOC контейнер
+    QMap<QString, double> data;                    // Множество данных в формате ключ-значение
+
+    std::shared_ptr<QChartView> chartView;         // Представление диаграммы
+
 };
 #endif // MAINWINDOW_H
