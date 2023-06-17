@@ -125,20 +125,20 @@ void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &
         ioc.RegisterInstance<IDataReading, JsonDataReading>();
     }
 
-    data = ioc.GetObject<IDataReading>()->GetData(filePath, 15); // Создание объекта, хранящего данные
+    data = ioc.GetObject<IDataReading>()->GetData(filePath, 10); // Создание объекта, хранящего данные
 }
-
 
 
 void MainWindow::DrawChart()
 {
-    if (chartTypesComboBox->currentText() == "Столбчатая диаграмма") { // Проверка установленного типа диаграммы
+    // Проверка установленного типа диаграммы
+    if (chartTypesComboBox->currentText() == "Столбчатая диаграмма") {
         ioc.RegisterInstance<ICharts, BarCharts>(); // Регистрация ICharts с классом BarCharts
     }
+    else if (chartTypesComboBox->currentText() == "Круговая диаграмма") {
+        ioc.RegisterInstance<ICharts, PieCharts>(); // Регистрация ICharts с классом PieCharts
+    }
     ioc.GetObject<ICharts>()->ChartDrawing(data, chartView); // Рисование диаграммы нужного типа
-
-
-
 }
 
 

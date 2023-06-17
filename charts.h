@@ -4,6 +4,8 @@
 #include <QChart>
 #include <QBarSeries>
 #include <QBarSet>
+#include <QPieSeries>
+#include <QPieSlice>
 #include <QChartView>
 #include "datareading.h"
 
@@ -15,6 +17,12 @@ public:
 };
 
 class BarCharts: public ICharts // Кокретная реализация для столбчатой диаграммы
+{
+public:
+    void ChartDrawing(QMap<QString,double>, std::shared_ptr<QChartView>);
+};
+
+class PieCharts: public ICharts // Кокретная реализация для круговой диаграммы
 {
 public:
     void ChartDrawing(QMap<QString,double>, std::shared_ptr<QChartView>);
