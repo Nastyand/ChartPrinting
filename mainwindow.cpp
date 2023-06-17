@@ -76,8 +76,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Соединение сигнала со слотом
     // Открытие папки по нажатию кнопки
     connect(openFolderButton.get(), &QPushButton::clicked, this, &MainWindow::OpenFolder);
-
-
 }
 
 
@@ -99,6 +97,7 @@ void MainWindow::OpenFolder()
     connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::ReadData);
     connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::DrawChart);
     connect(chartBWCheckBox.get(), &QCheckBox::stateChanged, this, &MainWindow::ColorChange);
+    connect(printingButton.get(), &QPushButton::clicked, this, &MainWindow::PrintChart);
 }
 
 void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &deselected)
@@ -152,6 +151,17 @@ void MainWindow::ColorChange()
     }
     else {
         chartView->chart()->setGraphicsEffect(nullptr); // Возврат исходных цветов диаграммы
+    }
+}
+
+void MainWindow::PrintChart()
+{
+    QString filePath = QFileDialog::getSaveFileName(nullptr, "Печать", "", "PDF (*.pdf)"); // Создание имени файла
+    if (!filePath.isEmpty()) // Если имя задано, то есть строка не пустая
+    {
+        QPdfWriter pdfWriter(filePath); // Создание средства записи PDF
+        QPainter painter(&pdfWriter); // Создание объекта для рисования
+        chartView->render(&painter); // Рисование диаграммы в pdf
     }
 }
 

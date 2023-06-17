@@ -24,6 +24,8 @@
 #include "datareading.h"
 #include <QChartView>
 #include <QGraphicsColorizeEffect>
+#include <QPdfWriter>
+#include <QPainter>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -42,12 +44,12 @@ public slots:
     void ReadData(const QItemSelection &selected, const QItemSelection &deselected); // Слот для извлечения данных из выбранного файла
     void DrawChart(); // Слот для рисования диаграммы выбранного типа
     void ColorChange(); // Слот для смены цвета диаграммы
-
+    void PrintChart(); // Слот для печати диаграммы
 
 private:
     Ui::MainWindow *ui;
 
-    QString filePath;
+    QString filePath; // Путь к файлу
 
     std::unique_ptr<QPushButton> openFolderButton; // Кнопка "открыть папку"
     std::unique_ptr<QLabel> chartTypeLabel;        // Метка "тип диаграммы"
@@ -61,7 +63,6 @@ private:
     QItemSelectionModel* selectionModel;           // Отслеживание выбранных элементов
     IOCContainer ioc;                              // IOC контейнер
     QMap<QString, double> data;                    // Множество данных в формате ключ-значение
-
     std::shared_ptr<QChartView> chartView;         // Представление диаграммы
 
 };
