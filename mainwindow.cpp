@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Открытие папки по нажатию кнопки
     connect(openFolderButton.get(), &QPushButton::clicked, this, &MainWindow::OpenFolder);
 
+
 }
 
 
@@ -97,6 +98,7 @@ void MainWindow::OpenFolder()
 
     connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::ReadData);
     connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::DrawChart);
+    connect(chartBWCheckBox.get(), &QCheckBox::stateChanged, this, &MainWindow::ColorChange);
 }
 
 void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &deselected)
@@ -141,7 +143,17 @@ void MainWindow::DrawChart()
     ioc.GetObject<ICharts>()->ChartDrawing(data, chartView); // Рисование диаграммы нужного типа
 }
 
-
+void MainWindow::ColorChange()
+{
+    if (chartBWCheckBox->isChecked()) {
+        std::unique_ptr<QGraphicsColorizeEffect> color = std::make_unique<QGraphicsColorizeEffect>(); // Создание объекта для раскрашивания диаграммы
+        color->setColor(Qt::black); // Установка черного цвета
+        chartView->chart()->setGraphicsEffect(color.release()); // Применение цвета к диаграмме
+    }
+    else {
+        chartView->chart()->setGraphicsEffect(nullptr); // Возврат исходных цветов диаграммы
+    }
+}
 
 MainWindow::~MainWindow()
 {

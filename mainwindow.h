@@ -23,6 +23,7 @@
 #include "ioccontainer.h"
 #include "datareading.h"
 #include <QChartView>
+#include <QGraphicsColorizeEffect>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,6 +41,7 @@ public slots:
     void OpenFolder(); // Слот для открытия папки
     void ReadData(const QItemSelection &selected, const QItemSelection &deselected); // Слот для извлечения данных из выбранного файла
     void DrawChart(); // Слот для рисования диаграммы выбранного типа
+    void ColorChange();
 
 
 private:
