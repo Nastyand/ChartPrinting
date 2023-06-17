@@ -135,12 +135,12 @@ void MainWindow::DrawChart()
 {
     // Проверка установленного типа диаграммы
     if (chartTypesComboBox->currentText() == "Столбчатая диаграмма") {
-        ioc.RegisterInstance<ICharts, BarCharts>(); // Регистрация ICharts с классом BarCharts
+        ioc.RegisterInstance<Charts, BarCharts>(); // Регистрация ICharts с классом BarCharts
     }
     else if (chartTypesComboBox->currentText() == "Круговая диаграмма") {
-        ioc.RegisterInstance<ICharts, PieCharts>(); // Регистрация ICharts с классом PieCharts
+        ioc.RegisterInstance<Charts, PieCharts>(); // Регистрация ICharts с классом PieCharts
     }
-    ioc.GetObject<ICharts>()->ChartDrawing(data, chartView); // Рисование диаграммы нужного типа
+    ioc.GetObject<Charts>()->ChartDrawing(data, chartView); // Рисование диаграммы нужного типа
 }
 
 void MainWindow::ColorChange()

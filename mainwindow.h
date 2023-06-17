@@ -41,7 +41,7 @@ public slots:
     void OpenFolder(); // Слот для открытия папки
     void ReadData(const QItemSelection &selected, const QItemSelection &deselected); // Слот для извлечения данных из выбранного файла
     void DrawChart(); // Слот для рисования диаграммы выбранного типа
-    void ColorChange();
+    void ColorChange(); // Слот для смены цвета диаграммы
 
 
 private:

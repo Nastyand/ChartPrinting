@@ -9,23 +9,25 @@
 #include <QChartView>
 #include "datareading.h"
 
-class ICharts // Абстрактный класс для рисования диаграммы
+class Charts // Абстрактный класс для рисования диаграммы
 {
 public:
-    virtual ~ICharts() = default;
-    virtual void ChartDrawing(QMap<QString,double>, std::shared_ptr<QChartView>) = 0;
+    virtual ~Charts() = default;
+    void ChartDrawing(QMap<QString,double>, std::shared_ptr<QChartView>);
+protected:
+    virtual void CreateSeries(QMap<QString,double>,std::shared_ptr<QChartView>)=0;
+    virtual void CreateAxes( std::shared_ptr<QChartView>);
+    virtual void RemoveSeries (std::shared_ptr<QChartView>);
 };
 
-class BarCharts: public ICharts // Кокретная реализация для столбчатой диаграммы
+class BarCharts: public Charts // Кокретная реализация для столбчатой диаграммы
 {
-public:
-    void ChartDrawing(QMap<QString,double>, std::shared_ptr<QChartView>);
+    void CreateSeries(QMap<QString,double>,std::shared_ptr<QChartView> chart);
 };
 
-class PieCharts: public ICharts // Кокретная реализация для круговой диаграммы
+class PieCharts: public Charts // Кокретная реализация для круговой диаграммы
 {
-public:
-    void ChartDrawing(QMap<QString,double>, std::shared_ptr<QChartView>);
+    void CreateSeries(QMap<QString,double>,std::shared_ptr<QChartView> chart);
 };
 
 
