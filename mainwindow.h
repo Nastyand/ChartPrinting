@@ -60,7 +60,6 @@ private:
 
     std::shared_ptr<QFileSystemModel>leftPartModel;// Модель файловой системы
     std::unique_ptr<QListView>listView;            // Представление файлов
-    QItemSelectionModel* selectionModel;           // Отслеживание выбранных элементов
     IOCContainer ioc;                              // IOC контейнер
     QMap<QString, double> data;                    // Множество данных в формате ключ-значение
     std::shared_ptr<QChartView> chartView;         // Представление диаграммы

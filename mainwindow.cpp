@@ -107,9 +107,6 @@ void MainWindow::OpenFolder()
     listView->setModel(leftPartModel.get());
     listView->setRootIndex(leftPartModel->index(filePath));
 
-    // Отслеживание выбранных элементов в представлении listView
-    selectionModel = listView->selectionModel();
-
     // Соединение сигналов со слотами
     connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::ReadData);
     connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::DrawChart);
