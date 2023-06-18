@@ -2,7 +2,6 @@
 #define DATAREADING_H
 #include <QString>
 #include <QtSql>
-#include <QDebug>
 #include <QMap>
 #include <QStringList>
 #include <QJsonDocument>

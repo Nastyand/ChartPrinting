@@ -13,13 +13,11 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QTableView>
-
 #include <QFileSystemModel>
 #include <QListView>
 #include <QFileDialog>
 #include <QItemSelectionModel>
 #include <QFileInfo>
-#include <QDebug>
 #include "ioccontainer.h"
 #include "datareading.h"
 #include <QChartView>
@@ -51,6 +49,7 @@ private:
     Ui::MainWindow *ui;
 
     QString filePath; // Путь к файлу
+    int limit=50;
 
     std::unique_ptr<QPushButton> openFolderButton; // Кнопка "открыть папку"
     std::unique_ptr<QLabel> chartTypeLabel;        // Метка "тип диаграммы"

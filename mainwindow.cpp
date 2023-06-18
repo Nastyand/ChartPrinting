@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include "datareading.h"
 #include "charts.h"
-#include <QMessageBox>
+
 int IOCContainer::s_nextTypeId = 115094801;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -161,7 +161,7 @@ void MainWindow::DrawChart()
     else if (chartTypesComboBox->currentText() == "Круговая диаграмма") {
         ioc.RegisterInstance<Charts, PieCharts>(); // Регистрация ICharts с классом PieCharts
     }
-    ioc.GetObject<Charts>()->ChartDrawing(data, chartView, 15); // Рисование диаграммы нужного типа
+    ioc.GetObject<Charts>()->ChartDrawing(data, chartView, limit); // Рисование диаграммы нужного типа
 }
 
 void MainWindow::ColorChange()
