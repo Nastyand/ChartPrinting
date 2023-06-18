@@ -8,6 +8,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFile>
+#include <QMessageBox>
 
 class IDataReading// Абстрактный класс для чтения данных
 {

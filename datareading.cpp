@@ -15,7 +15,7 @@ QMap<QString,double> SqlDataReading::GetData(QString filePath)
         }
     }
     else {
-        qDebug()<< "Ошибка в чтении файла ";
+        QMessageBox::information(nullptr, "Ошибка", "Файл не читается");
     }
     return data;
 }
@@ -40,11 +40,11 @@ QMap<QString,double> JsonDataReading::GetData(QString filePath)
             data.insert(key, value); // Добавление значения в объект data
         }
         if (data.isEmpty()) {       // Проверка файла на пустоту
-            qDebug()<< "Файл пуст ";
+            QMessageBox::information(nullptr, "Ошибка", "Файл пуст");
         }
     }
     else {
-        qDebug()<< "Ошибка в чтении файла ";
+        QMessageBox::information(nullptr, "Ошибка", "Файл не читается");
     }
     return data;
 }

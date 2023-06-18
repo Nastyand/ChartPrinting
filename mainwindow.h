@@ -26,6 +26,7 @@
 #include <QGraphicsColorizeEffect>
 #include <QPdfWriter>
 #include <QPainter>
+#include <QDir>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "datareading.h"
 #include "charts.h"
+#include <QMessageBox>
 int IOCContainer::s_nextTypeId = 115094801;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -86,6 +87,14 @@ void MainWindow::OpenFolder()
     // Открытие диалогового окна
     QString filePath = QFileDialog::getExistingDirectory(this, "Выбор папки", QDir::homePath());
 
+    // Проверка на пустоту папки
+    QDir folder(filePath);
+    if (folder.isEmpty())
+    {
+        QMessageBox::information(nullptr, "Ошибка", "Папка пуста");
+        return;
+    }
+
     leftPartModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
     leftPartModel->setRootPath(filePath);
 
@@ -93,8 +102,6 @@ void MainWindow::OpenFolder()
     QStringList filter;
     filter << "*.sqlite" << "*.json";
     leftPartModel->setNameFilters(filter);
-    leftPartModel->setNameFilterDisables(false);
-
 
     // Установка модели данных для отображения
     listView->setModel(leftPartModel.get());
