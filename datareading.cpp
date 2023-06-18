@@ -48,3 +48,32 @@ QMap<QString,double> JsonDataReading::GetData(QString filePath)
     }
     return data;
 }
+
+QMap<QString,double> CsvDataReading::GetData(QString filePath)
+{
+
+    QFile file(filePath); // Создание объекта для представления файла
+
+    QMap<QString,double> data; // Создание объекта QMap
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) { // Проверка открывается ли файл
+
+        QTextStream text(&file); //Создание потока для извлечения данных из файла
+
+        while (!text.atEnd()) // Считывание данных до конца файла
+        {
+            QString line = text.readLine(); // Чтение одной строки
+            QStringList parts = line.split(";"); // Разделение строки по ';'
+            data.insert(parts[0], parts[1].toDouble()); // Добавление значения в объект data
+        }
+
+        file.close(); // Закрытие файла
+        if (data.isEmpty()) { // Проверка файла на пустоту
+            QMessageBox::information(nullptr, "Ошибка", "Файл пуст");
+        }
+    }
+    else {
+        QMessageBox::information(nullptr, "Ошибка", "Файл не читается");
+    }
+    return data;
+}

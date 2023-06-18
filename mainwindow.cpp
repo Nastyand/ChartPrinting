@@ -100,7 +100,7 @@ void MainWindow::OpenFolder()
 
     // Фильтр типов файлов
     QStringList filter;
-    filter << "*.sqlite" << "*.json";
+    filter << "*.sqlite" << "*.json" << "*.csv";
     leftPartModel->setNameFilters(filter);
 
     // Установка модели данных для отображения
@@ -139,6 +139,12 @@ void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &
     {
         // Регистрирация IDataReading с классом JsonDataReading
         ioc.RegisterInstance<IDataReading, JsonDataReading>();
+    }
+
+    else if (fileType == "csv")
+    {
+        // Регистрирация IDataReading с классом CsvDataReading
+        ioc.RegisterInstance<IDataReading, CsvDataReading>();
     }
 
     DataReader dataRead (ioc.GetObject<IDataReading>());

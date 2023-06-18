@@ -29,6 +29,12 @@ public:
     QMap<QString,double> GetData(QString filePath);// Метод, возвращающий данные в формате ключ-значение
 };
 
+class CsvDataReading: public IDataReading // Конкретная реализация для csv
+{
+public:
+    QMap<QString,double> GetData(QString filePath);// Метод, возвращающий данные в формате ключ-значение
+};
+
 class DataReader // Класс-контекст для создания объкта, хранит ссылку на объект конкретной стратегии
 {
     std::shared_ptr<IDataReading> data;
