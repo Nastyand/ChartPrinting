@@ -141,7 +141,8 @@ void MainWindow::ReadData(const QItemSelection &selected, const QItemSelection &
         ioc.RegisterInstance<IDataReading, JsonDataReading>();
     }
 
-    data = ioc.GetObject<IDataReading>()->GetData(filePath); // Создание объекта, хранящего данные
+    DataReader dataRead (ioc.GetObject<IDataReading>());
+    data=dataRead.GetData(filePath); // Создание объекта, хранящего данные
 }
 
 

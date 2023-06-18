@@ -28,4 +28,16 @@ class JsonDataReading: public IDataReading // Конкретная реализ�
 public:
     QMap<QString,double> GetData(QString filePath);// Метод, возвращающий данные в формате ключ-значение
 };
+
+class DataReader // Класс-контекст для создания объкта, хранит ссылку на объект конкретной стратегии
+{
+    std::shared_ptr<IDataReading> data;
+public:
+    DataReader(std::shared_ptr<IDataReading> d):data(d){}
+    QMap<QString,double> GetData(QString filePath) // Метод, возвращающий данные в формате ключ-значение
+    {
+        return data->GetData(filePath);
+    }
+};
+
 #endif // DATAREADING_H
