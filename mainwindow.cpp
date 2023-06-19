@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Соединение сигналов со слотами
     connect(openFolderButton.get(), &QPushButton::clicked, this, &MainWindow::OpenFolder);
-    connect(chartTypesComboBox.get(), QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::DrawChart);
+    connect(chartTypesComboBox.get(), &QComboBox::currentIndexChanged, this, &MainWindow::DrawChart);
     connect(chartBWCheckBox.get(), &QCheckBox::stateChanged, this, &MainWindow::ColorChange);
     connect(printingButton.get(), &QPushButton::clicked, this, &MainWindow::PrintChart);
 }
